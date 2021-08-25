@@ -3,7 +3,7 @@ import { ActionType } from '../action-types';
 import { Action } from '../actions';
 import { Cell } from '../cell';
 
-interface CellsState {
+export interface CellsState {
   loading: boolean;
   error: string | null;
   order: string[];
@@ -67,7 +67,7 @@ const reducer = produce((state: CellsState = initialState, action: Action) => {
     default:
       return state;
   }
-});
+}, initialState);
 
 const randomId = () => {
   return Math.random().toString(36).substr(2, 5);
