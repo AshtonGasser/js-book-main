@@ -5,20 +5,21 @@ import AddCell from './add-cell';
 
 const CellList: React.FC = () => {
   const cells = useTypedSelector(({ cells: { order, data } }) =>
-    order.map((id) => data[id])
+    order.map((id: any) => data[id])
   );
 
-  const renderedCells = cells.map((cell) => (
+  const renderedCells = cells.map((cell: any) => (
     <Fragment key={cell.id}>
-      <AddCell nextCellId={cell.id} />
       <CellListItem cell={cell} />
+      <AddCell previousCellId={cell.id} /> 
     </Fragment>
   ));
 
   return (
     <div>
+      <AddCell forceVisible={cells.length === 0} previousCellId={null} />
       {renderedCells}
-      <AddCell forceVisible={cells.length === 0} nextCellId={null} />
+      
     </div>
   );
 };

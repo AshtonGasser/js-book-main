@@ -1,40 +1,45 @@
-import { useState, useEffect } from 'react';
-import Resizable from './resizable';
-import bundle from '../bundler';
+import { useEffect } from 'react';
 import CodeEditor from './code-editor';
 import Preview from './preview';
-import { Cell } from '../Redux'
-import { useActions } from '../hooks/use-actions'
+import Resizable from './resizable';
+import { Cell } from '../Redux';
+import { useActions } from '../hooks/use-actions';
+import { useTypedSelector } from '../hooks/use-typed-selector';
+
 interface CodeCellProps {
-  cell: Cell
+  cell: Cell;
 }
+
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
- 
-  const [err, setErr] = useState('');
-  const [code, setCode] = useState('');
-  const { updateCell } = useActions();
+  const { updateCell, createBundle } = useActions();
+  const bundle = useTypedSelector((state) => state.bundles[cell.id]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const output = await bundle(cell.content);
-      setCode(output.code);
-      setErr(output.err);
-    }, 800);
+      createBundle(cell.id, cell.content);
+    }, 750);
+
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.content]);
+  }, [cell.content, cell.id, createBundle]);
 
   return (
-    <Resizable direction='vertical'>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
-        <Resizable direction='horizontal'>
+    <Resizable direction="vertical">
+      <div
+        style={{
+          height: 'calc(100% - 10px)',
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+        <Resizable direction="horizontal">
           <CodeEditor
             initialValue={cell.content}
             onChange={(value) => updateCell(cell.id, value)}
           />
         </Resizable>
-        <Preview code={code} err={err}  />
+        {bundle && <Preview code={bundle.code} err={bundle.err} />}
       </div>
     </Resizable>
   );
