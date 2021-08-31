@@ -9,14 +9,14 @@ export const useCumulativeCode = (cellId: string) => {
         // show function displays objects and  JSX elements in 
         // each cell cumulatively 
         const showFunction = `
-        import _React from 'react';
-        import _ReactDOM from 'react-dom';
+        import React from 'react';
+        import ReactDOM from 'react-dom';
         var show = (value) => {
           const root = document.querySelector('#root');
     
           if (typeof value === 'object') {
             if (value.$$typeof && value.props) {
-              _ReactDOM.render(value, root);
+              ReactDOM.render(value, root);
             } else {
               root.innerHTML = JSON.stringify(value);
             }
@@ -31,7 +31,7 @@ export const useCumulativeCode = (cellId: string) => {
     
         for (let c of orderCells) {
           if (c.type === 'code') {
-            if (c.type === cellId) {
+            if (c.id === cellId) {
               cumulativeCode.push(showFunction)
             } else {
               cumulativeCode.push(ShowFunctionNoop)
