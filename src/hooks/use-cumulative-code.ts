@@ -6,7 +6,7 @@ export const useCumulativeCode = (cellId: string) => {
         const { data, order } = state.cells;
         const orderCells = order.map((id) => data[id]);
     
-        // show function displays objects and  JSX elements in 
+        // show function displays objects and JSX elements in 
         // each cell cumulatively 
         const showFunction = `
         import React from 'react';
